@@ -26,15 +26,33 @@ const tocarSom = (letra) => {
     audio.play();
 }
 
+const adicionarEfeito = (letra) => document.getElementById(letra)
+                                           .classList.add('active');
+
+const removerEfeito = (letra) => {
+    const div = document.getElementById(letra);
+    const removeActive = ()=> div.classList.remove('active')
+    div.addEventListener('transitionend',removeActive); // aguarda a transição acabar para remover o efeito
+}
 
 const ativarDiv = (evento) => {
-    const letra = evento.target.id;
+    let letra = '';
+    if (evento.type == 'click'){
+        letra = evento.target.id;
+    }else{
+        letra = evento.key.toUpperCase();
+    }
+    
     const letraPermitida = sons.hasOwnProperty(letra);
     if (letraPermitida){
+        adicionarEfeito(letra);
         tocarSom(letra);
+        removerEfeito(letra);
     }
 }
 
 exibir(sons);
 document.getElementById('container')
         .addEventListener('click', ativarDiv);
+
+window.addEventListener('keydown',ativarDiv);
